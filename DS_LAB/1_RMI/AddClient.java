@@ -1,50 +1,49 @@
 import java.rmi.Naming;
+import java.util.Scanner;
 
 /**
  * Client program.
- * Looks up the remote object and calls the remote add method.
+ * Takes user input and sends it to the RMI server.
  */
 public class AddClient {
 
-    /**
-     * Main entry point for the client.
-     *
-     * Expected arguments:
-     * args[0] -> server host/IP
-     * args[1] -> first number
-     * args[2] -> second number
-     *
-     * @param args command-line arguments
-     */
     public static void main(String[] args) {
-        if (args.length != 3) {
-            System.out.println("Usage: java AddClient <server-ip> <num1> <num2>");
-            return;
-        }
+
+        Scanner sc = new Scanner(System.in);
 
         try {
-            String serverHost = args[0];
-            double a = Double.parseDouble(args[1]);
-            double b = Double.parseDouble(args[2]);
+            // Ask for server IP
+            System.out.print("Enter server IP (localhost or 127.0.0.1): ");
+            String serverHost = sc.nextLine();
 
-            // Build the RMI URL
+            // Ask user for numbers
+            System.out.print("Enter first number: ");
+            double a = sc.nextDouble();
+
+            System.out.print("Enter second number: ");
+            double b = sc.nextDouble();
+
+            // Build RMI URL
             String url = "rmi://" + serverHost + "/AddServer";
 
-            // Look up the remote object
-            AddServerIntf stub = (AddServerIntf) Naming.lookup(url);
+            // Get remote object reference
+            AddServerIntf stub =
+                    (AddServerIntf) Naming.lookup(url);
 
-            // Make the remote call
+            // Call remote method
             double result = stub.add(a, b);
 
-            System.out.println("Server: " + serverHost);
-            System.out.println("First number: " + a);
+            // Display result
+            System.out.println("\n===== RESULT =====");
+            System.out.println("First number : " + a);
             System.out.println("Second number: " + b);
-            System.out.println("Sum: " + result);
-        } catch (NumberFormatException e) {
-            System.out.println("Error: numbers must be valid numeric values.");
+            System.out.println("Sum          : " + result);
+
         } catch (Exception e) {
-            System.out.println("Client error: " + e);
+            System.out.println("Client Error: " + e);
             e.printStackTrace();
+        } finally {
+            sc.close();
         }
     }
 }
