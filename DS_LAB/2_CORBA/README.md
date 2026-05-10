@@ -30,14 +30,14 @@ Expected Output:
 
 ```bash
 openjdk version "1.8.0_482"
-
+OpenJDK Runtime Environment (build 1.8.0_482-8u482-ga~us1-0ubuntu1~22.04-b08)
+OpenJDK 64-Bit Server VM (build 25.482-b08, mixed mode)
 javac 1.8.0_482
-
 /usr/lib/jvm/java-8-openjdk-amd64/bin/java
 /usr/lib/jvm/java-8-openjdk-amd64/bin/idlj
 /usr/lib/jvm/java-8-openjdk-amd64/bin/orbd
-
 /usr/lib/jvm/java-8-openjdk-amd64
+
 ```
 
 ---
@@ -78,7 +78,12 @@ javac *.java ReverseModule/*.java
 Expected warning:
 
 ```bash
+ReverseModule/_ReverseStub.java:48: warning: IORCheckImpl is internal proprietary API and may be removed in a future release
+     com.sun.corba.se.impl.orbutil.IORCheckImpl.check(str, "ReverseModule._ReverseStub");
+                                  ^
 Note: ReverseModule/ReversePOA.java uses unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+1 warning
 ```
 
 This warning is normal.
@@ -106,6 +111,7 @@ java ReverseServer -ORBInitialPort 1050 -ORBInitialHost localhost
 Expected Output:
 
 ```bash
+50 -ORBInitialHost localhost
 Reverse Object Created
 CORBA Server is ready...
 Waiting for client requests...
@@ -129,47 +135,6 @@ Enter String: hello world
 Original String : hello world
 Reversed String : dlrow olleh
 ```
-
----
-
-## Full Terminal Output
-
-### Terminal 1
-
-```bash
-idlj -fall ReverseModule.idl
-javac *.java ReverseModule/*.java
-orbd -ORBInitialPort 1050
-```
-
----
-
-### Terminal 2
-
-```bash
-java ReverseServer -ORBInitialPort 1050 -ORBInitialHost localhost
-
-Reverse Object Created
-CORBA Server is ready...
-Waiting for client requests...
-Received string: hello world
-```
-
----
-
-### Terminal 3
-
-```bash
-java ReverseClient -ORBInitialPort 1050 -ORBInitialHost localhost
-
-Enter String: hello world
-
-===== RESULT =====
-Original String : hello world
-Reversed String : dlrow olleh
-```
-
----
 
 ## Viva Questions
 
